@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ItzhakS/Chatbot/issues"
   },
-  "homepage": "https://github.com/ItzhakS/Chatbot#readme"
+  "homepage": "https://github.com/ItzhakS/Chatbot#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
