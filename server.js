@@ -11,27 +11,42 @@ app.use(bodyParser.urlencoded({extended: false}))
 
 var dbUrl = 'mongodb://ChatbotAdmin:ChatbotAdmin@ds239177.mlab.com:39177/learning_node'
 
-var messages = [
-    {name: "Jon", message: "Yo"},
-    {name: "Bernard", message: "Hey"}
-]
+var Message = mongoose.model('Message', {
+    name: String,
+    message: String
+})
+
+// var messages = [
+//     {name: "Jon", message: "Yo"},
+//     {name: "Bernard", message: "Hey"}
+// ]
 
 app.get("/messages", (req , res) => {
-    res.send(messages)
+    Message.find({}, (err, messages) =>{
+        res.send(messages)
+    })
 })
 
 app.post("/messages", (req , res) => {
-    messages.push(req.body)
-    io.emit('message', req.body)
-    res.sendStatus(200)
+    var message = new Message(req.body)
+
+    message.save((err) =>{
+        if(err)
+            sendStatus(500)
+
+        messages.push(req.body)
+        io.emit('message', req.body)
+        res.sendStatus(200)
+    })
 })
 
 io.on("connection", (socket) => {
 
 })
 
+// mongoose.Promise = global.Promise;
 mongoose.connect(dbUrl,  (err) => {
-
+    console.log('Connected')
 })
 
 var server = http.listen(3000, () => {
